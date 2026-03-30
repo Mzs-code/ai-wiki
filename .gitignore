@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor/IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Claude Code
+.claude/
+
+# Temp files
+*.swp
+*.swo
+*~
+Thumbs.db
