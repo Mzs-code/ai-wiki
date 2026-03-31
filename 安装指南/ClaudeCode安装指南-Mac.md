@@ -393,7 +393,7 @@ claude
 
 ### A.1 注册账号
 
-1. 浏览器访问 https://ikuuu.nl/auth/login
+1. 浏览器访问 https://ikuuu.nl/auth/register?code=2vS9
 2. 注册一个账号
 
 <img src="image/mac/11.jpg" alt="注册页面" width="680" />
