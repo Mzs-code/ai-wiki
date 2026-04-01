@@ -1,6 +1,6 @@
 # Claude Code 安装指南 — Mac
 
-> **作者**: @Mzs | **日期**: 2026/3/31 | **版本**: v1.0.2
+> **作者**: @Mzs | **日期**: 2026/3/31 | **版本**: v1.0.3
 >
 > GitHub: [github.com/Mzs-code/ai-wiki](https://github.com/Mzs-code/ai-wiki)
 
@@ -277,9 +277,13 @@ curl -fsSL https://claude.ai/install.sh | bash
 
 ### 6.2 完成安装配置
 
-1. 安装完成后, 终端会输出一段提示命令, **复制该命令并执行一次**
+1. 安装完成后, 终端会输出一段提示命令, 如果有下图红框部分, 则**复制该命令并执行一次**
 
-<img src="image/mac/16.jpg" alt="安装提示命令" width="660" />
+```bash
+ echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+```
+
+<img src="image/mac/18.png" alt="安装提示命令" width="660" />
 
 2. 验证安装是否成功:
 
