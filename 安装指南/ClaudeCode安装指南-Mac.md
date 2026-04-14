@@ -69,6 +69,12 @@
 
 ---
 
+## 系统最低要求
+
+> Claude Code 要求 **macOS 13.5** 或更高版本, 请在安装前确认你的系统版本符合要求.
+
+---
+
 ## 一、检查网络情况
 
 Claude Code 的安装和使用依赖海外网络环境, 因此第一步需要确认网络连通性.
@@ -368,6 +374,10 @@ npm install -g @anthropic-ai/claude-code
 ```
 
 <img src="image/intel/5.jpg" alt="安装 Claude Code" width="570" />
+
+> **注意**: Claude Code 要求 **macOS 13.5** 或更高版本. 如果你的系统版本低于此要求, 安装完成后执行 `claude` 时将会出现如下错误提示:
+
+<img src="image/intel/6.png" alt="macOS 版本过低错误提示" width="570" />
 
 ### 7.5 完成安装配置
 
