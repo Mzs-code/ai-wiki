@@ -33,6 +33,11 @@ Claude Code Mac 安装指南，覆盖以下内容：
 
 > 本项目持续更新中，欢迎关注。
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Mzs-code/ai-wiki&type=Timeline)](https://star-history.com/#Mzs-code/ai-wiki&Timeline)
+
+
 ## License
 
 本项目采用 [MIT License](./LICENSE) 开源。
