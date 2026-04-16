@@ -1,6 +1,6 @@
 # Claude Code 安装指南 — Mac
 
-> **作者**: @Mzs | **日期**: 2026/3/31 | **版本**: v1.0.3
+> **作者**: @Mzs | **日期**: 2026/4/16 | **版本**: v1.0.4
 >
 > GitHub: [github.com/Mzs-code/ai-wiki](https://github.com/Mzs-code/ai-wiki)
 
@@ -11,6 +11,7 @@
 - [Claude Code 安装指南 — Mac](#claude-code-安装指南--mac)
   - [目录](#目录)
   - [名词说明](#名词说明)
+  - [系统最低要求](#系统最低要求)
   - [一、检查网络情况](#一检查网络情况)
     - [1.1 浏览器验证](#11-浏览器验证)
     - [1.2 终端验证](#12-终端验证)
@@ -50,6 +51,8 @@
     - [Q2: 再次打开 iTerm2 执行 claude 时提示 command not found](#q2-再次打开-iterm2-执行-claude-时提示-command-not-found)
     - [Q3: 执行 source ~/.zshrc 提示文件不存在](#q3-执行-source-zshrc-提示文件不存在)
     - [Q4: 出现弹框提示 "pip3 命令需要命令行工具" 的安装提示](#q4-出现弹框提示-pip3-命令需要命令行工具-的安装提示)
+  - [Changelog](#changelog)
+    - [v1.0.4 - 2026/4/16](#v104---2026416)
 
 ---
 
@@ -284,6 +287,8 @@ curl -fsSL https://claude.ai/install.sh | bash
 <img src="image/mac/15.jpg" alt="安装中" width="118" />
 
 > 开始下载后, 可以在科学上网工具中观察到有几 MB 的下载速度, 说明安装正在进行.
+>
+> 如果提示curl: (22) The requested URL returned error: 403. 说明命中了人机检测,则使用Intel 芯片 Mac 安装步骤
 
 ### 6.2 完成安装配置
 
@@ -533,3 +538,11 @@ source ~/.zshrc
 
 <img src="image/3.png" alt="pip3 安装提示" width="460" />
 
+---
+
+## Changelog
+
+### v1.0.4 - 2026/4/16
+
+- 新增系统最低要求说明, 强调 Claude Code 需要 macOS 13.5 或更高版本.
+- 补充 M 芯片安装遇到 `curl: (22) The requested URL returned error: 403` 时的处理提示.
