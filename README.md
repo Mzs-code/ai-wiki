@@ -13,11 +13,11 @@ AI 企业培训白皮书及相关资料合集。
 
 ### 部分内容预览
 
-![基础概念](./白皮书/AI生态演变与企业应用/image/基础概念.jpg)
+![基础概念](./白皮书/AI生态演变与企业应用/image2/基础概念.jpg)
 
-![MCP](./白皮书/AI生态演变与企业应用/image/MCP.jpg)
+![MCP](./白皮书/AI生态演变与企业应用/image2/MCP.jpg)
 
-![SKILLS](./白皮书/AI生态演变与企业应用/image/SKILLS.jpg)
+![SKILLS](./白皮书/AI生态演变与企业应用/image2/SKILLS.jpg)
 
 ### 安装指南预览
 
