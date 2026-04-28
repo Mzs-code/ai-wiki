@@ -1,6 +1,6 @@
 # Claude Code 安装指南 — Mac
 
-> **作者**: @Mzs | **日期**: 2026/4/16 | **版本**: v1.0.4
+> **作者**: @Mzs | **日期**: 2026/4/20 | **版本**: v1.0.5
 >
 > GitHub: [github.com/Mzs-code/ai-wiki](https://github.com/Mzs-code/ai-wiki)
 
@@ -51,7 +51,9 @@
     - [Q2: 再次打开 iTerm2 执行 claude 时提示 command not found](#q2-再次打开-iterm2-执行-claude-时提示-command-not-found)
     - [Q3: 执行 source ~/.zshrc 提示文件不存在](#q3-执行-source-zshrc-提示文件不存在)
     - [Q4: 出现弹框提示 "pip3 命令需要命令行工具" 的安装提示](#q4-出现弹框提示-pip3-命令需要命令行工具-的安装提示)
+    - [Q5: 之前可正常执行 claude, 几天后提示 Symbol not found: \_ubrk\_clone](#q5-之前可正常执行-claude-几天后提示-symbol-not-found-_ubrk_clone)
   - [Changelog](#changelog)
+    - [v1.0.5 - 2026/4/20](#v105---2026420)
     - [v1.0.4 - 2026/4/16](#v104---2026416)
 
 ---
@@ -540,7 +542,57 @@ source ~/.zshrc
 
 ---
 
+### Q5: 之前可正常执行 claude, 几天后提示 Symbol not found: _ubrk_clone
+
+**报错信息:**
+
+```
+claude
+dyld[24084]: Symbol not found: _ubrk_clone
+  Referenced from: /Users/xxx/.nvm/versions/node/v24.14.1/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe
+  Expected in: /usr/lib/libicucore.A.dylib
+zsh: abort      claude
+```
+
+**原因:** 当前系统版本低于 macOS 13 (例如 12.2.1), 而新版本的 Node.js / Claude Code 依赖系统库中 `_ubrk_clone` 符号, 老系统的 `libicucore.A.dylib` 不包含该符号, 因此崩溃.
+
+**解决方案:**
+
+- **方案 1 (推荐):** 将 macOS 升级到 **13 及以上** 版本.
+
+- **方案 2:** 降级 Node.js 到 v20, 并安装 Claude Code 旧版本:
+
+```bash
+# 安装 Node.js 20 LTS
+nvm install 20
+
+# 切换到 v20
+nvm use 20
+
+# 设为默认版本, 避免每次手动切
+nvm alias default 20
+
+# 验证版本
+node -v
+
+# 安装 Claude Code 旧版本
+npm install -g @anthropic-ai/claude-code@2.1.90
+
+# 验证安装
+claude --version
+
+# 禁用自动更新, 避免升级后再次报错
+echo 'export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1' >> ~/.zshrc
+source ~/.zshrc
+```
+
+---
+
 ## Changelog
+
+### v1.0.5 - 2026/4/20
+
+- 新增疑难杂症 Q5: 老系统 (macOS < 13) 执行 `claude` 出现 `Symbol not found: _ubrk_clone` 的处理方案.
 
 ### v1.0.4 - 2026/4/16
 
