@@ -2,6 +2,8 @@
 
 > **作者**: @Mzs | **日期**: 2026/4/14 | **版本**: v1.0.0
 
+> GitHub: [github.com/Mzs-code/ai-wiki](https://github.com/Mzs-code/ai-wiki)
+
 
 ---
 
