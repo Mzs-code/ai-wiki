@@ -26,7 +26,7 @@ CC-Switch 是 Claude Code 的配置管理工具, 提供 Skills 管理、会话�
 2. 点击右侧 **Releases**, 滑动到页面最下方的 **Assets**
 3. 下载 Windows 版安装包: `CC-Switch-v.xx.xx-Windows.exe`
 4. 双击运行安装包, 按提示完成安装
-5. 私信公司管理员获取 **API Key**
+5. 私信公司管理员获取 **API Key** 或注册 **https://www.packyapi.com/register?aff=HSIE**
 6. 打开 CC-Switch, 点击右上角 **添加按钮** → 选择 **PackyCode** → 填入 Key → 点击 **添加**
 
 ---

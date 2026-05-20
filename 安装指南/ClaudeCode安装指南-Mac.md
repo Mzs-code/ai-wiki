@@ -212,7 +212,7 @@ CC-Switch 是 Claude Code 的配置管理工具, 具备 Skills 管理、会话�
 ### 3.2 安装与配置
 
 1. 双击打开安装包, 将图标拖动到 **应用程序** 中即可
-2. 私信公司管理员, **获取 API Key**
+2. 私信公司管理员, **获取 API Key** 或注册 **https://www.packyapi.com/register?aff=HSIE**
 3. 在 CC-Switch 中点击右上角的 **添加按钮**
 4. 选择 **PackyCode**
 
@@ -418,7 +418,7 @@ claude
 
 ### A.1 注册账号
 
-1. 浏览器访问 https://ikuuu.nl/auth/register?code=2vS9
+1. 浏览器访问 https://ikuuu.win/auth/register?code=2vS9
 2. 注册一个账号
 
 <img src="image/mac/11.jpg" alt="注册页面" width="680" />
