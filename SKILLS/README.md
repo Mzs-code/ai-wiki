@@ -1,6 +1,11 @@
 # SKILLS — Claude Code 技能合集
 
-本目录沉淀了围绕 **Claude Code Skills** 的实操经验,既包含 Anthropic 官方的「技能元工具」,也包含一份按官方最佳实践审查提示词的自研 skill,还有把第三方平台(ProcessOn / 腾讯问卷 / 飞书 / OpenAI Codex)接入 Claude Code 的踩坑全记录。
+本目录沉淀了围绕 **Claude Code Skills** 的实操经验,按来源分为四类:
+
+- **官方元技能**(`官方SKILLS/`)—— Anthropic 出品的「制作技能的技能」;
+- **自研 skill**(`自研SKILLS/`)—— 自己写的提示词审查官、寓言学概念两个 skill;
+- **第三方 Skill 案例**(`processon/` · `腾讯问卷/` · `飞书/`)—— 把外部平台接入 Claude Code 的踩坑全记录;
+- **插件**(`Codex插件/`)—— 在 Claude Code 内调用 OpenAI Codex。
 
 > **什么是 Skill?**
 > Skill 是 Claude Code 的可插拔技能扩展,通过一个带 frontmatter 的 `SKILL.md` 描述「何时触发、怎么干」,Claude 在对话中按需自动调用。详见官方 [Skills 文档](https://docs.claude.com/zh-CN/docs/claude-code/skills)。
@@ -12,7 +17,8 @@
 | 分类 | 文档 | 你能学到什么 |
 |------|------|------|
 | 官方元技能 | [skill-creator](./官方SKILLS/skill-creator.md) | 用「制作技能的技能」从零编写、测试、迭代你自己的 Skill |
-| 自研 skill | [review-by-claude-prompting-best-practices](./review-by-claude-prompting-best-practices/SKILL.md) | 按 Claude 官方 prompt engineering 最佳实践,自动对你写的 SKILL.md / system prompt 打分、改写、并发实测对比 |
+| 自研 skill | [review-by-claude-prompting-best-practices](./自研SKILLS/review-by-claude-prompting-best-practices/SKILL.md) | 按 Claude 官方 prompt engineering 最佳实践,自动对你写的 SKILL.md / system prompt 打分、改写、并发实测对比 |
+| 自研 skill | [learn-by-story](./自研SKILLS/learn-by-story/README.md) | 给一个抽象概念,用一则不点破名字的寓言把它「演」出来,再附概念解析与两道检验题,5 分钟吃透 |
 | 第三方 Skill 案例 | [ProcessOn](./processon/processon-skills%20介绍.md) | 一句话生成流程图 / 时序图 / 架构图等可编辑专业图形 |
 | 第三方 Skill 案例 | [腾讯问卷](./腾讯问卷/腾讯问卷的AI工作流.md) | 从「Plan 模式打磨问卷」到「拿到投放链接 + 配置跳转逻辑」的全工作流 |
 | 第三方 Skill 案例 | [飞书 CLI (lark-cli)](./飞书/飞书cli/飞书%20CLI（lark-cli）使用记录.md) | 用 CLI 创建飞书文档、给群发消息,含 user / bot 双身份模型与坑位 |
@@ -40,8 +46,8 @@ Anthropic 官方提供的**元技能**,帮你完成一个完整闭环:
 
 ### 2. review-by-claude-prompting-best-practices —— 提示词审查官
 
-> 文件: [`review-by-claude-prompting-best-practices/SKILL.md`](./review-by-claude-prompting-best-practices/SKILL.md)
-> 配套参考: [`references/best-practices.md`](./review-by-claude-prompting-best-practices/references/best-practices.md) · [`references/rubric.md`](./review-by-claude-prompting-best-practices/references/rubric.md)
+> 文件: [`自研SKILLS/review-by-claude-prompting-best-practices/SKILL.md`](./自研SKILLS/review-by-claude-prompting-best-practices/SKILL.md)
+> 配套参考: [`references/best-practices.md`](./自研SKILLS/review-by-claude-prompting-best-practices/references/best-practices.md) · [`references/rubric.md`](./自研SKILLS/review-by-claude-prompting-best-practices/references/rubric.md)
 
 按 Claude 官方 [prompt engineering 最佳实践](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview) 对任意提示词(SKILL.md / system prompt / agent 指令 / 普通 md)做**结构化审查**:
 
@@ -54,7 +60,27 @@ Anthropic 官方提供的**元技能**,帮你完成一个完整闭环:
 
 ---
 
-### 3. ProcessOn Skills —— 一句话出专业图
+### 3. learn-by-story —— 寓言学概念
+
+> 文件: [`自研SKILLS/learn-by-story/SKILL.md`](./自研SKILLS/learn-by-story/SKILL.md)
+> 方法说明: [`自研SKILLS/learn-by-story/README.md`](./自研SKILLS/learn-by-story/README.md)
+> 配套参考: [`references/examples.md`](./自研SKILLS/learn-by-story/references/examples.md) · [`references/original-prompt.md`](./自研SKILLS/learn-by-story/references/original-prompt.md)
+
+给一个**陌生或抽象的概念**,用一则**不点破概念名**的寓言把它「演」给你看 —— 靠故事的「间接」与「陌生化」,让你读到结尾那一刻自己**恍然大悟**(常常学名忘了,故事还记着)。输出三部分:
+
+```
+1. 寓言正文   —— 不出现概念名、不用术语,用具体场景 + 转折承载全部意义
+2. 概念解析   —— 揭示叫什么 / 属哪个学科 / 内核是什么 + 故事元素 → 概念部件 映射表
+3. 两道检验题 —— ① 理解检验(抓没抓住内核)② 迁移检验(能否迁到别的领域)
+```
+
+方法源自 Anthropic 的 **Amanda Askell**(2025-04 访谈),经卡兹克补充三点(防套路约束 / 指定具体概念 / 结尾加检验题),本 skill 又沉淀了实测得来的「写作心法」。
+
+触发关键词: `用寓言讲讲 XX / 帮我吃透 XX / 把 XX 编成一个故事 / 用比喻讲清楚 XX`
+
+---
+
+### 4. ProcessOn Skills —— 一句话出专业图
 
 > 文件: [`processon/processon-skills 介绍.md`](./processon/processon-skills%20介绍.md)
 > 项目地址: <https://github.com/processonai/processon-skills>
@@ -67,7 +93,7 @@ API Key 形如 `sk-po-xxxxxxxx`,建议放 `PROCESSON_API_KEY` 环境变量。
 
 ---
 
-### 4. 腾讯问卷 AI 工作流
+### 5. 腾讯问卷 AI 工作流
 
 > 文件: [`腾讯问卷/腾讯问卷的AI工作流.md`](./腾讯问卷/腾讯问卷的AI工作流.md)
 > 配套作弊条: [`腾讯问卷/腾讯问卷-Skills-Cheatsheet.md`](./腾讯问卷/腾讯问卷-Skills-Cheatsheet.md)
@@ -88,7 +114,7 @@ Cheatsheet 里另外详细列出了 OpenAPI 路由树 vs BFF 鉴权的两套体�
 
 ---
 
-### 5. 飞书 CLI (lark-cli) 使用记录
+### 6. 飞书 CLI (lark-cli) 使用记录
 
 > 文件: [`飞书/飞书cli/飞书 CLI（lark-cli）使用记录.md`](./飞书/飞书cli/飞书%20CLI（lark-cli）使用记录.md)
 > 项目地址: <https://github.com/larksuite/cli>
@@ -104,7 +130,7 @@ Cheatsheet 里另外详细列出了 OpenAPI 路由树 vs BFF 鉴权的两套体�
 
 ---
 
-### 6. 飞书 上传图片/文件 Skill
+### 7. 飞书 上传图片/文件 Skill
 
 > 文件: [`飞书/飞书上传图片或文件/飞书上传图片或文件技能说明.md`](./飞书/飞书上传图片或文件/飞书上传图片或文件技能说明.md)
 > Skill 实现: [`飞书/飞书上传图片或文件/feishu-image-or-files/`](./飞书/飞书上传图片或文件/feishu-image-or-files/)
@@ -123,7 +149,7 @@ Token ≈ 2 小时过期,脚本每次都重新获取,避免缓存踩坑。
 
 ---
 
-### 7. Codex 插件 in Claude Code
+### 8. Codex 插件 in Claude Code
 
 > 文件: [`Codex插件/codex-plugin-cc-guide.md`](./Codex插件/codex-plugin-cc-guide.md)
 > 项目地址: <https://github.com/openai/codex-plugin-cc>
