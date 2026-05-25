@@ -3,7 +3,7 @@
 本目录沉淀了围绕 **Claude Code Skills** 的实操经验,按来源分为四类:
 
 - **官方元技能**(`官方SKILLS/`)—— Anthropic 出品的「制作技能的技能」;
-- **自研 skill**(`自研SKILLS/`)—— 自己写的提示词审查官、寓言学概念两个 skill;
+- **自研 skill**(`自研SKILLS/`)—— 自己写的提示词审查官、寓言学概念、demo→工程化交付工作流三个 skill;
 - **第三方 Skill 案例**(`processon/` · `腾讯问卷/` · `飞书/`)—— 把外部平台接入 Claude Code 的踩坑全记录;
 - **插件**(`Codex插件/`)—— 在 Claude Code 内调用 OpenAI Codex。
 
@@ -19,6 +19,7 @@
 | 官方元技能 | [skill-creator](./官方SKILLS/skill-creator.md) | 用「制作技能的技能」从零编写、测试、迭代你自己的 Skill |
 | 自研 skill | [review-by-claude-prompting-best-practices](./自研SKILLS/review-by-claude-prompting-best-practices/SKILL.md) | 按 Claude 官方 prompt engineering 最佳实践,自动对你写的 SKILL.md / system prompt 打分、改写、并发实测对比 |
 | 自研 skill | [learn-by-story](./自研SKILLS/learn-by-story/README.md) | 给一个抽象概念,用一则不点破名字的寓言把它「演」出来,再附概念解析与两道检验题,5 分钟吃透 |
+| 自研 skill | [demo-to-delivery-workflow](./自研SKILLS/demo-to-delivery-workflow/SKILL.md) | 把一个 demo/PoC 按 7 步闭环推进到工程化交付:plan 分解 → 多轮七维 review → 分阶段实施 → 文档体系,配套三层 review + PROGRESS.md 跨会话锚点 + 验收门 |
 | 第三方 Skill 案例 | [ProcessOn](./processon/processon-skills%20介绍.md) | 一句话生成流程图 / 时序图 / 架构图等可编辑专业图形 |
 | 第三方 Skill 案例 | [腾讯问卷](./腾讯问卷/腾讯问卷的AI工作流.md) | 从「Plan 模式打磨问卷」到「拿到投放链接 + 配置跳转逻辑」的全工作流 |
 | 第三方 Skill 案例 | [飞书 CLI (lark-cli)](./飞书/飞书cli/飞书%20CLI（lark-cli）使用记录.md) | 用 CLI 创建飞书文档、给群发消息,含 user / bot 双身份模型与坑位 |
@@ -80,7 +81,31 @@ Anthropic 官方提供的**元技能**,帮你完成一个完整闭环:
 
 ---
 
-### 4. ProcessOn Skills —— 一句话出专业图
+### 4. demo-to-delivery-workflow —— demo→工程化交付工作流
+
+> 文件: [`自研SKILLS/demo-to-delivery-workflow/SKILL.md`](./自研SKILLS/demo-to-delivery-workflow/SKILL.md)
+> 配套: [`steps/`](./自研SKILLS/demo-to-delivery-workflow/steps/)(7 步详述) · [`workflow-templates/`](./自研SKILLS/demo-to-delivery-workflow/workflow-templates/)(模板套件)
+
+把一个 demo / 原型 / PoC **有章法地**推进到工程化交付的 7 步闭环:
+
+```
+demo 业务文档化 → plan 平行分解 → 多轮七维 review → 拆 IMPLEMENTATION → 分阶段实施 → demo 对比调优 → 文档体系生成
+```
+
+核心机制:
+
+- **三层 review**(L0 人工 + L1 agent + L2 sanity-scan): 每阶段末跑, subagent 用完即释放, 避免主对话 echo chamber
+- **PROGRESS.md 跨会话锚点**: 长周期项目跨数周/数月, 新会话首读即唤醒上下文
+- **验收门双模板**(代码型 / 文档型)+ **finding/filtering 两阶段评审**: 失败即停, 不让「测试全绿」冒充「功能完成」
+- **4 种入口形态**(新建 / 维护增量 / V2 增量 / PoC 探索): 按项目体量自动降级, 避免过度仪式化
+
+针对 Claude Opus 4.7 prompt engineering 最佳实践迭代多轮(正面指令 / XML / 渐进披露 / 单一来源), 并经 `review-by-claude-prompting-best-practices` 审查 + 触发对照实测定稿。
+
+触发关键词: `把 demo 工程化 / 规划新项目实施路线 / 多维 plan 设计评审 / 跨会话续做长周期项目`
+
+---
+
+### 5. ProcessOn Skills —— 一句话出专业图
 
 > 文件: [`processon/processon-skills 介绍.md`](./processon/processon-skills%20介绍.md)
 > 项目地址: <https://github.com/processonai/processon-skills>
@@ -93,7 +118,7 @@ API Key 形如 `sk-po-xxxxxxxx`,建议放 `PROCESSON_API_KEY` 环境变量。
 
 ---
 
-### 5. 腾讯问卷 AI 工作流
+### 6. 腾讯问卷 AI 工作流
 
 > 文件: [`腾讯问卷/腾讯问卷的AI工作流.md`](./腾讯问卷/腾讯问卷的AI工作流.md)
 > 配套作弊条: [`腾讯问卷/腾讯问卷-Skills-Cheatsheet.md`](./腾讯问卷/腾讯问卷-Skills-Cheatsheet.md)
@@ -114,7 +139,7 @@ Cheatsheet 里另外详细列出了 OpenAPI 路由树 vs BFF 鉴权的两套体�
 
 ---
 
-### 6. 飞书 CLI (lark-cli) 使用记录
+### 7. 飞书 CLI (lark-cli) 使用记录
 
 > 文件: [`飞书/飞书cli/飞书 CLI（lark-cli）使用记录.md`](./飞书/飞书cli/飞书%20CLI（lark-cli）使用记录.md)
 > 项目地址: <https://github.com/larksuite/cli>
@@ -130,7 +155,7 @@ Cheatsheet 里另外详细列出了 OpenAPI 路由树 vs BFF 鉴权的两套体�
 
 ---
 
-### 7. 飞书 上传图片/文件 Skill
+### 8. 飞书 上传图片/文件 Skill
 
 > 文件: [`飞书/飞书上传图片或文件/飞书上传图片或文件技能说明.md`](./飞书/飞书上传图片或文件/飞书上传图片或文件技能说明.md)
 > Skill 实现: [`飞书/飞书上传图片或文件/feishu-image-or-files/`](./飞书/飞书上传图片或文件/feishu-image-or-files/)
@@ -149,7 +174,7 @@ Token ≈ 2 小时过期,脚本每次都重新获取,避免缓存踩坑。
 
 ---
 
-### 8. Codex 插件 in Claude Code
+### 9. Codex 插件 in Claude Code
 
 > 文件: [`Codex插件/codex-plugin-cc-guide.md`](./Codex插件/codex-plugin-cc-guide.md)
 > 项目地址: <https://github.com/openai/codex-plugin-cc>
