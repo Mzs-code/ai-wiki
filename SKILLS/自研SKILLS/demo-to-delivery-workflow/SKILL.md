@@ -18,14 +18,14 @@ description: >-
 
 <recommended_runtime_config audience="human_operator">
 
-## ⚙️ 配套 Claude Opus 4.7 运行配置(强烈建议)
+## ⚙️ 配套 Claude Opus 4.7+(含 4.8)运行配置(强烈建议)
 
-本工作流是 **long-horizon agentic 场景**(数周-数月跨多会话)。Claude Opus 4.7 在此场景下的官方推荐配置:
+本工作流是 **long-horizon agentic 场景**(数周-数月跨多会话)。Claude Opus 4.7+(含 4.8)在此场景下的官方推荐配置:
 
-- **effort**:`xhigh`(coding / agentic 首选)或 `max`(超长 horizon)。本工作流的"多 subagent 三层 review"在 `xhigh` 以下会被模型默认压制
+- **effort**:`xhigh`(coding / agentic 首选)或 `max`(超长 horizon)。本工作流的"多 subagent 三层 review"在 `xhigh` 以下会被模型默认压制。**Opus 4.8 默认 effort=high**,用 4.8 跑长 horizon 仍建议显式调到 `xhigh`
 - **thinking**:`{type: "adaptive"}`(自动按复杂度分配思考预算)
 - **max_tokens**:≥ 64k(留够 subagent + tool call + thinking 的合并预算)
-- **subagent 频次**:本工作流故意采用 **"用完即释放" 的多 subagent 模式**,理由见 §0.4 — 这是与 4.7 默认行为相反的有意设计,正文中已对每处 subagent 给出 Why
+- **subagent 频次**:本工作流故意采用 **"用完即释放" 的多 subagent 模式**,理由见 §0.4 — 这是与 4.7+ 默认行为相反的有意设计,正文中已对每处 subagent 给出 Why
 
 **Adaptive thinking 触发引导**(下面的 `<api_runtime_config>` 段是给**配置 Claude API system prompt 的人**复制粘贴用的,**不是给模型的直接指令** — 模型本身不应当 "应用" 这段,而是当它出现在 system prompt 时按其行为):
 
@@ -177,7 +177,7 @@ gh pr merge / git merge --no-ff / git push
 3. **commit message 由用户撰写**(prefix 参考见 [`stage-template.md`](workflow-templates/stage-template.md) §1.5)
 4. 用户手动敲 `git commit`,hook 不会拦截(因为是用户主动调用,hook 设计为只拦截 AI 调用)
 
-**为什么是 hook 而非 prompt**:Prompt 约束在 4.7 字面化下虽会被遵守,但模型理解的"自动"与用户期望的"自动"边界不同(例如"用户说 commit 一下"算不算自动?);hook 是唯一可靠的强制层。
+**为什么是 hook 而非 prompt**:Prompt 约束在 4.7+ 字面化下虽会被遵守,但模型理解的"自动"与用户期望的"自动"边界不同(例如"用户说 commit 一下"算不算自动?);hook 是唯一可靠的强制层。
 
 </commit_mechanism>
 
@@ -187,9 +187,9 @@ gh pr merge / git merge --no-ff / git push
 
 </multi_ai_handover>
 
-### §0.4 为什么本工作流故意使用多 subagent(给 Claude 4.7 的解释)
+### §0.4 为什么本工作流故意使用多 subagent(给 Claude 4.7+ 的解释)
 
-Claude Opus 4.7 默认行为是**减少 subagent 使用**,倾向用主对话 reasoning 完成。本工作流刻意采用相反策略:
+Claude Opus 4.7+ 默认行为是**减少 subagent 使用**,倾向用主对话 reasoning 完成。本工作流刻意采用相反策略:
 
 <why_multi_subagent>
 
@@ -229,7 +229,7 @@ Claude Opus 4.7 默认行为是**减少 subagent 使用**,倾向用主对话 rea
 
 ## §2 通用纪律(贯穿全程,9 条)
 
-每个阶段都遵守。措辞采用 **正面指令为主**(Opus 4.7 官方推荐:"Tell Claude what to do instead of what not to do")。
+每个阶段都遵守。措辞采用 **正面指令为主**(Opus 4.7+ 官方推荐:"Tell Claude what to do instead of what not to do")。
 
 ### 第 1 条:plan 与 demo 是事实底座
 

@@ -10,7 +10,7 @@
 
 <two_phase_review>
 
-Claude Opus 4.7 对"严格 P0/P1/P2 分级 + 必须给具体修法"的 prompt 会**自我过滤**:在 finding 阶段就把 low-confidence / uncertain findings 静默丢掉,导致 recall 下降。
+Claude Opus 4.7+(含 4.8)对"严格 P0/P1/P2 分级 + 必须给具体修法"的 prompt 会**自我过滤**:在 finding 阶段就把 low-confidence / uncertain findings 静默丢掉,导致 recall 下降。
 
 为避免此反模式,本工作流把 review 拆为两个 phase:
 
@@ -342,7 +342,7 @@ revision-checklist.md 是"修订完成"的标志产物;未交付即视为修订�
 - 修订 plan 后不重跑 Pass 3 import 扫描 / Pass 7 sanity scan(修订引入的 import 漂移)
 - 用"建议加强 / 待完善"等模糊语,对实施者无指导价值 — 用 `<original_quote>` + `<fix>` 具体化解决
 
-(完整反模式清单见 `seven-dim-review.md` 末尾)
+(完整反模式清单见 `seven-dim/antipatterns.md`)
 
 ---
 
@@ -364,7 +364,7 @@ revision-checklist.md 是"修订完成"的标志产物;未交付即视为修订�
 | React Query queryKey 漏参数 | Pass 4 + Pass 3 实操 | grep queryFn 参数 vs queryKey |
 | 守卫 / 拦截器跳转自循环 | Pass 5 覆盖范围反向 | 验证"navigate 目标是否被同一 guard 再次拦截"|
 
-(完整交叉提示见 `seven-dim-review.md` 末尾)
+(完整交叉提示见 `seven-dim/cross-pass-tips.md`)
 
 ---
 

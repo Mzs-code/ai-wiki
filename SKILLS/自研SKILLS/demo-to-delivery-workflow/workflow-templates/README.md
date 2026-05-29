@@ -13,6 +13,7 @@
 | `stage-template.md` | IMPLEMENTATION 单阶段模板 + 验收门双模板 | SKILL.md 步骤 4 拆 IMPLEMENTATION + 步骤 5 每阶段验收 | ~200 |
 | `progress-template.md` | PROGRESS.md 模板(跨会话唤醒锚点)| SKILL.md 步骤 5 实施期 + 跨会话续做 + 多 AI 接手 | ~250 |
 | `review-agent-prompt.md` | 独立 review agent 6 槽位 **XML** prompt | 所有 L1 / L2 agent 钩子启动前必读 | ~300 |
+| `review-workflow-template.md` | **Workflow 化**的 L1/L2 review fan-out(可运行脚本 + schema 强制 finding)| **默认 subagent**;仅命中可复现 / 宽 fan-out / 硬 schema 之一 **且模型 ≥ Opus 4.8** 时升级(决策门见模板 §0)| ~360 |
 | `seven-dim-review.md` | 七维 review 完整提示词 | SKILL.md 步骤 3 多轮 review + 每阶段末 L1 七维触发 | ~470 |
 | `review-output-template.md` | finding/filtering 两阶段 + P0/P1/P2 分级 + 修订后扫描 6 步 + revision-checklist + 局部 review 范围 | review agent 输出格式参照 + 修订后必跑 | ~330 |
 | `agents-md-skeleton.md` | AGENTS.md 五段式骨架 + docs/ 矩阵 + reviewRule 增量 vs 重写决策 | SKILL.md 步骤 7 文档体系生成 | ~290 |
@@ -42,7 +43,7 @@ SKILL.md(总览 + 通用纪律)
 │   ├─ Core 5(必读)/ Extended 13(按需)
 │   └─ 入口决策树 4 种(A 新建 / B 维护 / C V2 / D PoC)
 │
-├─ §0.4 为什么用多 subagent(给 4.7 的解释)
+├─ §0.4 为什么用多 subagent(给 4.7+ 的解释)
 │
 ├─ §2 通用纪律 9 条 ←→ stage-template.md §0.2
 │

@@ -56,7 +56,7 @@
   - 业务逻辑阶段 → Plan agent 七维 Pass 3+5(实施者反向 + 覆盖范围)
   - 重构 / 整合阶段 → Plan agent 七维 Pass 6+7(跨层对照 + sanity scan)
   - **数据模型 / API 契约阶段 → 2 个独立 agent**(1 Plan 实施者反向 + 1 Explore 覆盖范围,交叉验证)
-    - **Why 2 agents**(给 4.7 的解释):数据模型/契约错误代价高,2 个独立视角的 finding 重叠度 < 40%,显著提升 recall。这里多 agent 是有意设计;详见 SKILL.md §0.4
+    - **Why 2 agents**(给 4.7+ 的解释):数据模型/契约错误代价高,2 个独立视角的 finding 重叠度 < 40%,显著提升 recall。这里多 agent 是有意设计;详见 SKILL.md §0.4
 - **L2**:修订后 sanity-scan
 - 所有 agent 用 [`../workflow-templates/review-agent-prompt.md`](../workflow-templates/review-agent-prompt.md) XML 6 槽位填
 

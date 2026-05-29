@@ -6,17 +6,17 @@
 
 ---
 
-## §1 为什么用多 subagent(对 4.7 的解释,启动前默读)
+## §1 为什么用多 subagent(对 4.7+ 的解释,启动前默读)
 
 <why_subagent>
 
-Claude Opus 4.7 默认压制 subagent 使用。本工作流故意采用相反策略,理由如下;启动 subagent 时主对话需理解这些理由,以免无意识降级为"主对话 reasoning"。
+Claude Opus 4.7+ 默认压制 subagent 使用。本工作流故意采用相反策略,理由如下;启动 subagent 时主对话需理解这些理由,以免无意识降级为"主对话 reasoning"。
 
 1. **独立性**:主对话累积了 plan 设计意图 + 用户偏好 + 已修订理由,reviewer 视角被污染。Subagent 通过槽位 2 `<must_not_read>` 隔离主对话,才能独立 review。
 2. **上下文释放**:Subagent 完成后只返回 ≤ 2000 字结论,不污染主对话。7 步流程跨数周/数月,主对话上下文必须节制。
 3. **交叉验证**:高风险节点(数据模型 / API 契约 / 跨模块对齐)用 2 个独立视角 agent,经验值 finding 重叠度 < 40%,显著提升 recall。
 
-启动 subagent 时,如果 4.7 倾向于"直接用主对话 reasoning"(典型征兆:"我可以直接帮你 review"),主动 spawn subagent 并附上上面 3 条理由。
+启动 subagent 时,如果 4.7+ 倾向于"直接用主对话 reasoning"(典型征兆:"我可以直接帮你 review"),主动 spawn subagent 并附上上面 3 条理由。
 
 </why_subagent>
 
@@ -24,7 +24,7 @@ Claude Opus 4.7 默认压制 subagent 使用。本工作流故意采用相反策
 
 ## §1.5 `<must_not_read>` 槽位的元层作用面(设计文档,启动前一次性默读)
 
-`<must_not_read>` 槽位看似冗余 — subagent 本身是新会话,本就读不到主对话。但 Claude Opus 4.7 在主对话里有时会决定"直接帮你 review",用 reasoning 模拟 subagent 输出,绕过 subagent spawn。`<must_not_read>` 的真实作用是切断此 echo chamber 路径,具体三层:
+`<must_not_read>` 槽位看似冗余 — subagent 本身是新会话,本就读不到主对话。但 Claude Opus 4.7+ 在主对话里有时会决定"直接帮你 review",用 reasoning 模拟 subagent 输出,绕过 subagent spawn。`<must_not_read>` 的真实作用是切断此 echo chamber 路径,具体三层:
 
 ① 必须 spawn 真正的 subagent,不用主对话 reasoning 替代;
 ② spawn 时不把主对话 transcript 作为输入传给 subagent;
@@ -190,7 +190,7 @@ Claude Opus 4.7 默认压制 subagent 使用。本工作流故意采用相反策
 
 ## §3 8 类视角 prompt few-shot
 
-每类视角的样例下含 **good / bad / edge 三种**,展示给 4.7 标准是什么。
+每类视角的样例下含 **good / bad / edge 三种**,展示给 4.7+ 标准是什么。
 
 ### 3.1 七维 review(SKILL.md 步骤 3 主跑)
 
@@ -253,7 +253,7 @@ Claude Opus 4.7 默认压制 subagent 使用。本工作流故意采用相反策
 启动 1 个 Plan agent 跑七维 review。
 ```
 
-**问题**:无 6 槽位 / 无角色 / 无必读 / 无 must_not_read(echo chamber)/ 无输出格式(会自我过滤)/ 无 constraints / 无 failure_examples / 无 user_context。4.7 会用主对话上下文做"伪 subagent"。
+**问题**:无 6 槽位 / 无角色 / 无必读 / 无 must_not_read(echo chamber)/ 无输出格式(会自我过滤)/ 无 constraints / 无 failure_examples / 无 user_context。4.7+ 会用主对话上下文做"伪 subagent"。
 
 </example_bad_seven_dim_review>
 
@@ -541,7 +541,7 @@ AI 写 reviewRule 时把"通用最佳实践"塞进来,但本项目实际未踩�
 
 ## §4 反模式(以下启动方式不可用)
 
-启动 review subagent 前自检:**以下 5 种启动方式都不可用**,因为它们让 4.7 退化为"主对话伪 review"。
+启动 review subagent 前自检:**以下 5 种启动方式都不可用**,因为它们让 4.7+ 退化为"主对话伪 review"。
 
 <antipattern>
 
@@ -555,12 +555,12 @@ AI 写 reviewRule 时把"通用最佳实践"塞进来,但本项目实际未踩�
 
 ---
 
-## §5 配合 Claude Opus 4.7 的工作风格备忘
+## §5 配合 Claude Opus 4.7+ 的工作风格备忘
 
 启动 subagent 时,主对话写明:
 
 ```
-本工作流使用 Claude Opus 4.7 在 effort=xhigh 或 max 下运行,subagent 是有意设计(理由见 review-agent-prompt.md §1)。
+本工作流使用 Claude Opus 4.7+ 在 effort=xhigh 或 max 下运行,subagent 是有意设计(理由见 review-agent-prompt.md §1)。
 请按 XML 6 槽位完整启动 subagent,不要降级为主对话直接 reasoning。
 Subagent 的 thinking 配置应是 adaptive;subagent 完成后只返回 ≤ 2000 字结论。
 ```

@@ -19,7 +19,7 @@ entry_mode: A 新建有 demo  /  B 维护性增量  /  C V2 增量  /  D PoC 探
 agent_hook_mode: full (每阶段都跑 L1/L2)  /  lightweight (工作流末尾跑 1 次最终 review)
 runtime_mode: 工程模式  /  探索模式(仅 PoC 入口 D)
 
-# Claude Opus 4.7 配套配置(WORKFLOW 推荐)
+# Claude Opus 4.7+(含 4.8)配套配置(WORKFLOW 推荐)
 claude_opus_4_7_config:
   effort: xhigh  # 或 max(超长 horizon)
   thinking: adaptive
