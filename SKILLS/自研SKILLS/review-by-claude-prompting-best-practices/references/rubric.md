@@ -23,6 +23,12 @@
 - 正例:`"Create an analytics dashboard. **Include as many relevant features and interactions as possible. Go beyond the basics to create a fully-featured implementation.**"`
 - 出处:Claude 官方 best-practices.md → "Migration considerations" 与 "Be clear and direct" 章节。这是 4.6+ 模型上提升完整度最有效的单条改写之一。
 
+**A5. 需要广泛应用的指令,是否显式声明了作用域?**
+- 新模型(Opus 4.7+,含 4.8)字面遵循指令,不会自动从"一项"泛化到"全部",也不会推断你没提的需求。
+- 反例:只给一个 section 的处理示范,却默认模型会套用到所有 section。
+- 正例:`"对每个 section 都应用这个格式,而不只是第一个。"`
+- 出处:best-practices.md → "More literal instruction following"。
+
 ---
 
 ## B. 解释 Why (Motivation / Reasoning)
@@ -33,7 +39,7 @@
 - 原因:模型能从解释中泛化到边界情况,只给规则反而僵化。
 
 **B2. 是否过度使用 ALL CAPS MUST / NEVER?**
-- Claude 4.5/4.6/4.7 已经对系统提示非常敏感,过于激烈的措辞反而会触发"过度遵从",在边缘场景上失灵。
+- Claude 4.5+(含 Opus 4.8)已经对系统提示非常敏感,过于激烈的措辞反而会触发"过度遵从",在边缘场景上失灵。
 - 倾向:用"自然语气 + 解释 why",而不是堆砌大写禁令。
 
 ---
@@ -106,8 +112,8 @@
 - 稳定场景:明确要求串行。
 
 **H3. 是否过度提示工具使用?**
-- 4.5/4.6 之后模型已经不会"过度不触发"。
-- `"CRITICAL: You MUST use this tool when..."` 这种写法在新模型上反而会过触发。
+- 4.5+ 之后模型已经不会"过度不触发";Opus 4.8 进一步改善了工具触发(修了 4.7"漏掉该调的工具"的问题),更不需要靠强语气补漏。
+- `"CRITICAL: You MUST use this tool when..."` 这种写法在新模型上反而会过触发。当年为「补漏」加的高压用工具指令,现在更该删,改成自然语气 `"Use this tool when..."`。
 
 ---
 
@@ -118,9 +124,14 @@
 
 **I2. 复杂任务是否给了适合的思考引导(而非死板的 step-by-step 模板)?**
 - 通用引导(`"think thoroughly"`)往往比手写 step-by-step 更好。
-- 关键词:Opus 4.5 在 thinking 关闭时对 "think" 一词敏感,可换用 "consider"、"evaluate"、"reason through"。
+- 关键词:Claude 4.7+(含 Opus 4.8)默认 thinking 关闭(不显式开 adaptive 就不思考),"关闭态对 'think' 一词敏感"这条因此更常触及 —— 可换用 "consider"、"evaluate"、"reason through"。
 
-**I3. 是否要求模型在结束前自检?**
+**I3. 是否用泛泛高压词硬催思考深度?**
+- 评审重点(prompt 文本层面,这才是本条依据):有没有"想深一点 / think very hard / 务必深入思考"这类泛泛高压词,企图靠文字催出更深推理。这类写法在新模型上既无效又可能扰乱(4.8 档位重标定后更明显)→ ⚠️。
+- 不是反模式(别误判):thinking 关闭时(Opus 4.8 / Claude Code 默认由 effort 管),官方把 manual CoT 当有效 fallback —— 让模型 step-by-step 想是推荐做法;effort 被迫锁在 `low` 时,一句"针对性"(非泛泛)的多步引导也是官方解法。这些应保留,不算违规。
+- 建议项(非评分依据):若确实需要更深推理,真正的杠杆是 effort 而非 prompt 文字 —— 可**顺带提醒**调用方(Claude Code:`/effort` / `--effort` / settings.json `effortLevel`;API:`output_config.effort`,Opus 4.8 默认 high)。但 effort 是运行时配置、审查者通常无法替 prompt 作者决定,**只作一句建议带过,不作为本条评分依据,更不要因此给 ❌**。
+
+**I4. 是否要求模型在结束前自检?**
 - `"在结束前,用 [test criteria] 验证你的答案。"` 能可靠捕获错误。
 
 ---
@@ -163,6 +174,8 @@
 | 多文档无结构 | 一大段裸文本拼接 | 多份 input 但全文无 `<document>` / `<documents>` 标签 | `<documents>` + `<document index>` |
 | 长文档放底部 | 文档在 query 之后 | 长 input(>2k 字)出现在指令/问题之后 | 长文档放顶,query 放底 |
 | **内容过稀** | 文件本身缺少必要章节 | **文件长度 < 500 字节 且 上述兜底信号全部 = 0** → 不是"写得对",而是"还没写完" | 触发 ❌,以 rubric A-F 维度逐项要求补章节(description / 工作流 / 输出 / 示例 / 角色 / why) |
+| 作用域未声明 | 给单项示范却想让模型套用到全部 | 出现 "every/all/各/所有/每个" 类广泛意图,但只举了单个示例或只描述了一处 | 显式写明 scope:"对每个…都…,而非只第一个"(新模型字面遵循,不会自动泛化) |
+| prompt 硬催思考 | 用泛泛高压词催"想更深" | `grep -oiE "think (very )?(hard\|deeply)\|想.{0,4}深\|深入思考\|务必.{0,6}思考" \| wc -l` ≥ 1 | 先分场景:thinking 关闭 / effort 锁死 → 保留针对性多步引导(manual CoT 是官方 fallback,勿误删);否则标 ⚠️ 删泛泛催词。调高 effort 仅作建议带过、非评分依据 |
 
 ---
 

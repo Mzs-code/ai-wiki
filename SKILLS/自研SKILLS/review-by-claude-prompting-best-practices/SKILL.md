@@ -1,6 +1,6 @@
 ---
 name: review-by-claude-prompting-best-practices
-description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并迭代优化用户的提示词(skills/md/system prompt 等)。当用户说"审查这个提示词/skill"、"基于最佳实践 review 我的 prompt"、"优化这个 SKILL.md"、"看看我这个提示词哪里写得不好"、"按 Claude best practices 改我的 prompt"、"review my prompt"、"audit this skill"、"check this prompt against best practices" 等任何涉及提示词质量审查、改进、对照官方规范评估的场景时,务必使用本 skill。即使用户没明说"最佳实践",只要是请求评估或优化已有的提示词/skill/md 文件,也应触发本 skill —— 它会按 Claude 官方文章逐项打分,生成新版副本,并通过双 agent 并发实测对比新老版本的实际效果。
+description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并迭代优化用户的提示词(skills/md/system prompt 等)。适用场景:用户说"审查这个提示词/skill"、"基于最佳实践 review 我的 prompt"、"优化这个 SKILL.md"、"看看我这个提示词哪里写得不好"、"按 Claude best practices 改我的 prompt"、"review my prompt"、"audit this skill"、"check this prompt against best practices",或任何请求评估、改进、对照官方规范打分一段已有提示词/skill/md 文件的情形(即使用户没明说"最佳实践")。本 skill 会按官方文章逐项打分,生成改进版,并可通过双 agent 并发实测对比新老版本的实际效果。
 ---
 
 # review-by-claude-prompting-best-practices
@@ -51,12 +51,21 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
 
    如果输入不清晰(比如只说"审查我的 skill"但没给路径),直接询问用户:"请提供文件路径或粘贴提示词内容。"
 
-3. **校验最佳实践缓存**。运行 `scripts/check_cache_age.sh`(路径相对于本 skill 根目录,即 SKILL.md 所在目录):
-   - `STATUS=fresh`:直接进入步骤 2,使用本地 `references/best-practices.md`
-   - `STATUS=stale`:告知用户"缓存已超过 30 天",询问是否要联网刷新。如果用户同意,用 WebFetch 重新拉取 `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices`,覆盖 `references/best-practices.md`,并把首部的 `last_fetched` 改成今天的日期(`date +%Y-%m-%d`)
+3. **校验最佳实践缓存**。新鲜度有「时间」和「内容」两道关,任一不过都应提示刷新:
+
+   **(a) 时间新鲜度**。运行 `scripts/check_cache_age.sh`(路径相对于本 skill 根目录,即 SKILL.md 所在目录):
+   - `STATUS=fresh`:时间这关通过,继续看 (b)
+   - `STATUS=stale`:告知用户"缓存已超过 TTL(默认 14 天)",询问是否联网刷新
    - `STATUS=missing`:直接 WebFetch 拉取并保存
 
-   *为什么要这么做:文章会随新模型发布更新。30 天的 TTL 既不会每次重拉浪费 token,又能在重要更新出来时不会拿过期规则去审查。*
+   **(b) 内容新鲜度(事件驱动,比时间更重要)**。读 `references/best-practices.md` frontmatter 的 `models_covered` 列表,然后判断:
+   - **你(执行本 skill 的模型)自己所属的型号**是否在 `models_covered` 里?
+   - 用户在对话里**提到的任何 GA Claude 模型**是否在里面?
+   - 只要有一个不在 → **即使 `STATUS=fresh` 也视为「内容陈旧」**,提示用户:"检测到 <模型名> 不在缓存覆盖范围内,文章可能已随该模型更新,建议联网刷新。"
+
+   **刷新动作**(用户同意后):用 WebFetch 重新拉取 `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices`,覆盖 `references/best-practices.md`,并更新首部 frontmatter:`last_fetched` 改成今天(`date +%Y-%m-%d`),`models_covered` 补上新模型。
+
+   *为什么要两道关:文章会随新模型发布更新,而新模型常在 TTL 窗口内就发布(例如缓存抓取仅几天后)。纯时间 TTL 抓不到这种「窗口内的内容更新」—— 会报 fresh 却拿过期规则审查。运行 skill 的模型自己就知道型号,一眼能看出「我不在 models_covered 里 → 该刷新」,这是比定时器更可靠的触发。*
 
 ### 步骤 2:逐项审查
 
@@ -271,6 +280,8 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
 
    关键:这两个 Agent 必须在 **同一个 assistant 回合的同一条消息中** 被启动,这样它们才会真正并发。分成两条消息发会变成串行,失去同时对比的意义。
 
+   *注:测评 agent 会继承当前会话模型。Claude 4.7+(含 Opus 4.8)默认 thinking 关闭,且推理深度由 effort 参数而非 prompt 文字控制。若被测提示词的效果依赖"模型自发深度推理",实测结果可能与开了 thinking / 高 effort 的生产环境不一致 —— 解读对比结论时把这点记在心里。*
+
 3. **等两个 agent 都返回后**,读取两边的 outputs 和 notes。
 
 ### 步骤 6:基于实测做二次优化
@@ -346,7 +357,7 @@ rm -rf /tmp/<skill-name>-eval-tasks.md /tmp/<skill-name>-eval/
 2. **用户反馈高于 rubric**。Rubric 是参考,不是法律。如果用户说"我故意用 ALL CAPS 因为下游模型旧",就按用户的来。
 
 3. **默认走 rubric.md 路线,best-practices.md 按需 spot-read**。
-   rubric.md 是 best-practices.md 的 11 维浓缩(约 180 行 vs 900 行,省约 40% token)。审查的 90% 场景在 rubric 上完成。
+   rubric.md 是 best-practices.md 的 11 维浓缩(约 200 行 vs 900 行,省约 40% token)。审查的 90% 场景在 rubric 上完成。
 
    **触发 spot-read best-practices.md 的具体情况**:
    - rubric 某条找到了证据但你不确定原文严重程度 → 打开对应章节确认
