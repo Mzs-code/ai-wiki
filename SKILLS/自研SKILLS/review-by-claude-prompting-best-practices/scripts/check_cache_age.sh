@@ -2,7 +2,7 @@
 # check_cache_age.sh
 # 检查 references/best-practices.md 的 last_fetched 是否超过 cache_ttl_days(默认 14 天)。
 # 注意:本脚本只判定「时间新鲜度」。「内容新鲜度」(新模型发布导致文章在 TTL 窗口内更新)
-#       由 SKILL.md 步骤 1.3 依据 frontmatter 的 models_covered 列表判断,不在本脚本内。
+#       由 SKILL.md 步骤 1.4 依据 frontmatter 的 models_covered 列表判断,不在本脚本内。
 # 输出: STATUS=fresh|stale|missing  AGE_DAYS=<N>  LAST_FETCHED=<YYYY-MM-DD>
 # 退出码: 0=fresh, 1=stale, 2=missing/parse-error
 

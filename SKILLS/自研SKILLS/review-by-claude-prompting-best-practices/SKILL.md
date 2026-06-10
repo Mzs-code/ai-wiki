@@ -51,7 +51,15 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
 
    如果输入不清晰(比如只说"审查我的 skill"但没给路径),直接询问用户:"请提供文件路径或粘贴提示词内容。"
 
-3. **校验最佳实践缓存**。新鲜度有「时间」和「内容」两道关,任一不过都应提示刷新:
+3. **确定目标模型**(被审 prompt 将来运行在哪个模型上 —— 不是执行审查的模型)。rubric 中标「模型条件」的条目(I2/I3、J3、K 表部分行)按它判定:
+
+   1. **先推断,别先问**:用户明说的模型 > prompt 内容里的线索(model id 字符串如 `claude-opus-4-8`、API 参数、提到的产品环境)> 无线索。
+   2. **推断不出时,只在"答案会改变结论"的情况下反问一句**:即被审 prompt 触及模型条件性维度(agentic 长跑 / subagent 编排 / thinking 引导 / 涉及"展示推理"类指令)。问法:"这个提示词将来主要跑在哪个模型上?(Fable 5 / Opus 4.8 / 更早版本 / 不确定)"
+   3. **其余情况不要问**:目标模型不影响任何条目判定时(纯 A-G 通用维度的 prompt),直接默认**最新一代(当前为 Claude Fable 5)**,并在报告头部「目标模型」一行注明"(默认假设)"。
+
+   *为什么不每次都问:多数 prompt 只触及通用维度,问了徒增打断;但用 Fable 5 审一个跑在 Opus 4.8 上的生产 system prompt 时,J3(subagent 方向相反)和 K「复述推理」(仅 Fable 5 是 ❌)会判错方向 —— 这才是值得一问的场景。*
+
+4. **校验最佳实践缓存**。新鲜度有「时间」和「内容」两道关,任一不过都应提示刷新:
 
    **(a) 时间新鲜度**。运行 `scripts/check_cache_age.sh`(路径相对于本 skill 根目录,即 SKILL.md 所在目录):
    - `STATUS=fresh`:时间这关通过,继续看 (b)
@@ -61,11 +69,20 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
    **(b) 内容新鲜度(事件驱动,比时间更重要)**。读 `references/best-practices.md` frontmatter 的 `models_covered` 列表,然后判断:
    - **你(执行本 skill 的模型)自己所属的型号**是否在 `models_covered` 里?
    - 用户在对话里**提到的任何 GA Claude 模型**是否在里面?
+   - 步骤 1.3 确定的**目标模型**是否在里面?
    - 只要有一个不在 → **即使 `STATUS=fresh` 也视为「内容陈旧」**,提示用户:"检测到 <模型名> 不在缓存覆盖范围内,文章可能已随该模型更新,建议联网刷新。"
 
-   **刷新动作**(用户同意后):用 WebFetch 重新拉取 `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices`,覆盖 `references/best-practices.md`,并更新首部 frontmatter:`last_fetched` 改成今天(`date +%Y-%m-%d`),`models_covered` 补上新模型。
+   **刷新动作**(用户同意后):
 
-   *为什么要两道关:文章会随新模型发布更新,而新模型常在 TTL 窗口内就发布(例如缓存抓取仅几天后)。纯时间 TTL 抓不到这种「窗口内的内容更新」—— 会报 fresh 却拿过期规则审查。运行 skill 的模型自己就知道型号,一眼能看出「我不在 models_covered 里 → 该刷新」,这是比定时器更可靠的触发。*
+   1. **归档而非覆盖**:先把现有缓存重命名为 `best-practices-<YYYYMMDD>.md`(当天日期,`date +%Y%m%d`),保留作历史对照。
+   2. **抓全部 source URL**:读旧缓存 frontmatter 的 `sources` 列表,对每个 URL 各跑一次 WebFetch。官方文章自 2026-06 起拆为「主文(通用)+ 模型专属子页」多个页面 —— **只刷主文会静默丢失模型专属内容**。当前已知三页:
+      - 主文 `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices`
+      - Fable 5 子页 `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5`
+      - Opus 4.8 子页 `https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-4-8`
+   3. **检查新子页**:抓回的主文里若出现了新的模型专属子页链接(如未来的 prompting-claude-XX),把它加进 `sources` 并一并抓取。
+   4. **合并写入** `references/best-practices.md`(Part 1 主文 / Part 2..N 各模型子页),更新 frontmatter:`sources`、`last_fetched`(今天)、`models_covered`(补上新模型)、`prev_version`(指向第 1 步的归档文件)。
+
+   *为什么要两道关:文章会随新模型发布更新,而新模型常在 TTL 窗口内就发布(例如缓存抓取仅几天后)。纯时间 TTL 抓不到这种「窗口内的内容更新」—— 会报 fresh 却拿过期规则审查。运行 skill 的模型自己就知道型号,一眼能看出「我不在 models_covered 里 → 该刷新」,这是比定时器更可靠的触发。Fable 5 发布(2026-06)正是实例:缓存抓取仅 12 天后文章即重构,TTL 仍报 fresh。*
 
 ### 步骤 2:逐项审查
 
@@ -78,7 +95,7 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
    - **建议改写**: 给出具体修改后的片段(可直接 paste 回原 prompt 的文本),而非"改一下"这种空话。
 
 3. **跨条目归纳整体观察**。审查完单条后,再总结 3-5 条整体性观察,例如:
-   - "整篇大量使用 ALL CAPS MUST/NEVER,在 Opus 4.5+ 上会过触发"
+   - "整篇大量使用 ALL CAPS MUST/NEVER,在 Opus 4.5+ / Fable 5 上会过触发;目标模型为 Fable 5 时官方明确建议删减旧时代过度规定性指令"
    - "缺少示例,而任务对输出格式高度敏感"
    - "长文档放在 query 之后,会损失约 30% 回答质量"
 
@@ -145,6 +162,7 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
 
 **审查对象**: `<文件路径或简短描述>`
 **审查依据**: Claude Prompting Best Practices (last_fetched: <YYYY-MM-DD>)
+**目标模型**: <步骤 1.3 确定的模型;若是默认值则写"Claude Fable 5(默认假设)">
 **总体评估**: <一句话:这个提示词的主要优势 + 主要短板>
 
 ---
@@ -280,7 +298,9 @@ description: 基于 Claude 官方 prompt engineering 最佳实践文章审查并
 
    关键:这两个 Agent 必须在 **同一个 assistant 回合的同一条消息中** 被启动,这样它们才会真正并发。分成两条消息发会变成串行,失去同时对比的意义。
 
-   *注:测评 agent 会继承当前会话模型。Claude 4.7+(含 Opus 4.8)默认 thinking 关闭,且推理深度由 effort 参数而非 prompt 文字控制。若被测提示词的效果依赖"模型自发深度推理",实测结果可能与开了 thinking / 高 effort 的生产环境不一致 —— 解读对比结论时把这点记在心里。*
+   *注 1:测评 agent 会继承当前会话模型。Claude 4.7+(含 Opus 4.8)默认 thinking 关闭,推理深度由 effort 参数而非 prompt 文字控制;Fable 5 仅支持 adaptive thinking 且思考输出只有 summarized 摘要。若被测提示词的效果依赖"模型自发深度推理",或目标模型(步骤 1.3)与会话模型不同代,实测结果可能与生产环境不一致 —— 解读对比结论时把这点记在心里。*
+
+   *注 2:设计测评 agent 指令时,**不要写"复述/展示你的内部推理过程"类要求**(上面模板里"记录哪里清晰、哪里模糊"是对提示词的评价,安全;"把你的思考过程原样写出来"则不行)—— 在 Fable 5 上会触发 `reasoning_extraction` refusal,直接污染对比实测。*
 
 3. **等两个 agent 都返回后**,读取两边的 outputs 和 notes。
 
@@ -357,12 +377,13 @@ rm -rf /tmp/<skill-name>-eval-tasks.md /tmp/<skill-name>-eval/
 2. **用户反馈高于 rubric**。Rubric 是参考,不是法律。如果用户说"我故意用 ALL CAPS 因为下游模型旧",就按用户的来。
 
 3. **默认走 rubric.md 路线,best-practices.md 按需 spot-read**。
-   rubric.md 是 best-practices.md 的 11 维浓缩(约 200 行 vs 900 行,省约 40% token)。审查的 90% 场景在 rubric 上完成。
+   rubric.md 是 best-practices.md 的 11 维浓缩(约 230 行 vs 1100+ 行)。审查的 90% 场景在 rubric 上完成。
 
    **触发 spot-read best-practices.md 的具体情况**:
-   - rubric 某条找到了证据但你不确定原文严重程度 → 打开对应章节确认
-   - 被审查的提示词触及 rubric 未覆盖的领域(如 computer use、vision、特殊 thinking 配置)→ 打开 best-practices.md 相关章节
+   - rubric 某条找到了证据但你不确定原文严重程度 → 打开对应章节确认(Part 1 通用 / Part 2 Fable 5 / Part 3 Opus 4.8)
+   - 被审查的提示词触及 rubric 未覆盖的领域(如 computer use、vision、frontend 设计、特殊 thinking 配置)→ 打开 best-practices.md 相关章节
    - rubric 与你的判断冲突 → 以 best-practices.md 为准
+   - rubric「模型条件」条目与目标模型对不上号(如目标是更早的 4.6)→ 打开对应 Part 核对该代模型的原文口径
 
    **Why**:三层 progressive disclosure 是官方 skill 设计原则。实测仅用 rubric 即可在常见反模式上拿满分;全文加载约多用 30-50% token,且容易让模型过度索引到无关章节,无可见收益。
 
@@ -380,8 +401,9 @@ rm -rf /tmp/<skill-name>-eval-tasks.md /tmp/<skill-name>-eval/
 review-by-claude-prompting-best-practices/
 ├── SKILL.md                          (本文件)
 ├── references/
-│   ├── best-practices.md             (官方文章本地缓存,~900 行)
-│   └── rubric.md                     (浓缩评审清单,11 维度)
+│   ├── best-practices.md             (官方文章本地缓存,三页合并:Part 1 主文通用 / Part 2 Fable 5 / Part 3 Opus 4.8)
+│   ├── best-practices-<YYYYMMDD>.md  (历史归档,刷新时由旧缓存重命名而来,勿用于审查)
+│   └── rubric.md                     (浓缩评审清单,11 维度,含模型条件条目)
 ├── scripts/
 │   └── check_cache_age.sh            (缓存年龄检查)
 ```
