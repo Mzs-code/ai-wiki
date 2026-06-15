@@ -280,6 +280,13 @@ xcode-select --install
 
 ### 6.1 执行安装命令
 
+> 目前这个方式非常容易出现**人机检测**, 如果出现了, 请直接跳到 [七、Intel 芯片 Mac 安装步骤](#七intel-芯片-mac-安装步骤) 进行安装.
+> 
+> 如curl: (22) The requested URL returned error: 403. 
+> 
+> 或'bash: line 1: syntax error near unexpected token `<'
+bash: line 1: `<!DOCTYPE html><!-- Last Published: Sat Jun 13 2026 01:37:35 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain="websitemain.claude.com" data-wf'
+
 在 iTerm2 中执行:
 
 ```bash
@@ -289,8 +296,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 <img src="image/mac/15.jpg" alt="安装中" width="118" />
 
 > 开始下载后, 可以在科学上网工具中观察到有几 MB 的下载速度, 说明安装正在进行.
->
-> 如果提示curl: (22) The requested URL returned error: 403. 说明命中了人机检测,则使用Intel 芯片 Mac 安装步骤
+
 
 ### 6.2 完成安装配置
 
