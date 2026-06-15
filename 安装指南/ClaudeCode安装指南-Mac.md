@@ -237,6 +237,21 @@ CC-Switch 是 Claude Code 的配置管理工具, 具备 Skills 管理, 会话管
 
 <img src="image/mac/14.jpg" alt="Key 填写" width="680" />
 
+6. 下滑,找到**配置JSON**,添加语言配置项:
+
+```json
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-xxxx",
+    "ANTHROPIC_BASE_URL": "https://www.packyapi.com"
+  },
+  "language": "chinese"
+}
+```
+
+<img src="image/7.png" alt="Key 填写" width="680" />
+
+
 ---
 
 ## 四、安装 Xcode Command Line Tools
