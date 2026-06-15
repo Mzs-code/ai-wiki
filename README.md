@@ -12,6 +12,8 @@ AI 企业培训白皮书与 Claude Code 实操指南合集. 围绕"为什么用,
 | 🛠️ [SKILLS — Claude Code 技能合集](./SKILLS/README.md) | 官方 skill-creator + 3 个自研 skill(提示词审查 / 寓言教学 / 项目工程化工作流)+ 第三方接入实操 |
 | 💻 [安装指南 - Mac](./安装指南/ClaudeCode安装指南-Mac.md) | macOS 完整安装闭环(科学上网 · iTerm2 · CC-Switch · M/Intel 芯片) |
 | 💻 [安装指南 - Windows(简版)](./安装指南/ClaudeCode安装指南-Windows-简版.md) | Windows 简版安装流程 |
+| 📝 [AI 岗位 JD](./AI岗位JD与面试题册/AI岗位JD.md) | AI 工程师(技术基座与企业 AI 赋能)对外招聘 JD |
+| 📝 [AI 岗位面试题册](./AI岗位JD与面试题册/AI岗位面试题册.md) | 概念题 + 实证核验两部分,含参考答案/扣分项/硬门槛(另有 [亮色](./AI岗位JD与面试题册/AI岗位面试题册-亮色.html) / [暗色](./AI岗位JD与面试题册/AI岗位面试题册-暗色.html) HTML 版) |
 
 ## 内容预览
 
