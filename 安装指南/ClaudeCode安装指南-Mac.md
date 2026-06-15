@@ -12,6 +12,7 @@
   - [目录](#目录)
   - [名词说明](#名词说明)
   - [系统最低要求](#系统最低要求)
+    - [查看方式](#查看方式)
   - [一、检查网络情况](#一检查网络情况)
     - [1.1 浏览器验证](#11-浏览器验证)
     - [1.2 终端验证](#12-终端验证)
@@ -21,12 +22,13 @@
     - [2.3 验证环境变量](#23-验证环境变量)
       - [步骤一: 检查当前 Shell](#步骤一-检查当前-shell)
       - [步骤二: 确认 .zshrc 文件存在](#步骤二-确认-zshrc-文件存在)
-      - [步骤三: 切换到 zsh（仅 bash 用户）](#步骤三-切换到-zsh仅-bash-用户)
+      - [步骤三: 切换到 zsh (仅 bash 用户)](#步骤三-切换到-zsh-仅-bash-用户)
   - [三、安装 CC-Switch](#三安装-cc-switch)
     - [3.1 下载安装包](#31-下载安装包)
     - [3.2 安装与配置](#32-安装与配置)
   - [四、安装 Xcode Command Line Tools](#四安装-xcode-command-line-tools)
     - [4.1 执行安装命令](#41-执行安装命令)
+  - [](#)
   - [五、检查芯片类型](#五检查芯片类型)
     - [5.1 查看方式](#51-查看方式)
     - [5.2 判断结果](#52-判断结果)
@@ -41,7 +43,7 @@
     - [7.4 安装 Claude Code](#74-安装-claude-code)
     - [7.5 完成安装配置](#75-完成安装配置)
     - [7.6 验证连通性](#76-验证连通性)
-  - [附录：科学上网配置](#附录科学上网配置)
+  - [附录:科学上网配置](#附录科学上网配置)
     - [A.1 注册账号](#a1-注册账号)
     - [A.2 购买套餐](#a2-购买套餐)
     - [A.3 下载客户端](#a3-下载客户端)
@@ -64,8 +66,8 @@
 
 | 术语 | 说明 |
 |------|------|
-| **终端（Terminal）** | Mac 自带的命令行工具, 可以用来输入命令和执行程序 |
-| **科学上网** | 即使用 VPN 等工具访问 Google、GitHub 等海外服务, 安装 Claude Code 时需要用到 |
+| **终端 (Terminal)** | Mac 自带的命令行工具, 可以用来输入命令和执行程序 |
+| **科学上网** | 即使用 VPN 等工具访问 Google, GitHub 等海外服务, 安装 Claude Code 时需要用到 |
 
 <table><tr>
 <td><img src="image/mac/0.jpg" alt="终端示例" width="440" /></td>
@@ -78,6 +80,17 @@
 
 > Claude Code 要求 **macOS 13.5** 或更高版本, 请在安装前确认你的系统版本符合要求.
 
+### 查看方式
+
+1. 点击左上角 **苹果图标**
+2. 选择 **"关于本机"** 选项
+
+<img src="image/mac/7.jpg" alt="关于本机" width="230" />
+
+3. 在 **"概览"** 标签页中查看 **"版本"** 信息
+
+<img src="image/4.png" alt="关于本机" width="230" />
+
 ---
 
 ## 一、检查网络情况
@@ -87,7 +100,7 @@ Claude Code 的安装和使用依赖海外网络环境, 因此第一步需要确
 ### 1.1 浏览器验证
 
 1. 打开浏览器, 访问 https://www.google.com/
-2. 如果**无法访问**, 请先完成 [附录：科学上网配置](#附录科学上网配置)
+2. 如果**无法访问**, 请先完成 [附录:科学上网配置](#附录科学上网配置)
 3. 如果**可以访问**, 打开科学上网工具中的 **"增强模式"** 或 **"虚拟网卡"**
 
 <table><tr>
@@ -166,7 +179,7 @@ source ~/.zshrc
 
 > 完成后直接进入 [三、安装 CC-Switch](#三安装-cc-switch).
 
-#### 步骤三: 切换到 zsh（仅 bash 用户）
+#### 步骤三: 切换到 zsh (仅 bash 用户)
 
 1. 执行切换命令:
 
@@ -174,7 +187,7 @@ source ~/.zshrc
 chsh -s /bin/zsh
 ```
 
-> 系统会要求输入密码, 输入后回车即可（输入时不会显示字符, 属正常现象）.
+> 系统会要求输入密码, 输入后回车即可 (输入时不会显示字符, 属正常现象).
 
 2. **关闭并重新打开 iTerm2**, 使切换生效
 
@@ -195,7 +208,9 @@ source ~/.zshrc
 
 ## 三、安装 CC-Switch
 
-CC-Switch 是 Claude Code 的配置管理工具, 具备 Skills 管理、会话管理、API Key 管理等功能.
+CC-Switch 是 Claude Code 的配置管理工具, 具备 Skills 管理, 会话管理, API Key 管理等功能.
+
+使用这个工具就可以避免使用Claude Code的订阅购买以及使用/login登录等方式.
 
 ### 3.1 下载安装包
 
@@ -229,6 +244,7 @@ CC-Switch 是 Claude Code 的配置管理工具, 具备 Skills 管理、会话�
 Xcode Command Line Tools 提供了编译和安装所需的基础开发工具链, 是后续安装 Claude Code 的前置依赖.
 
 > 需要注意, 如果是老版本的Mac, 整体下载需要20G的存储空间, 请确保有足够的磁盘空间后再执行安装.
+> 
 > 同时安装耗时较长, 可能需要等待 30 分钟以上, 请耐心等待安装完成.
 
 ### 4.1 执行安装命令
@@ -241,6 +257,10 @@ xcode-select --install
 
 如果弹出安装窗口, 点击 **安装** 并等待完成即可.
 
+> 此处提示安装时间要几十个小时,但实际不需要.大约 10 分钟内.
+> 
+> 但如果是老款的intel芯片的Mac,编译时间会比较长, 可能需要等待 30 分钟以上, 请耐心等待安装完成.
+
 <img src="image/1.png" alt="Xcode 安装弹窗" width="490" />
 
 > 如果输出以下内容, 则说明已安装过, 无需额外操作, 直接进入下一步:
@@ -249,6 +269,11 @@ xcode-select --install
 > xcode-select: note: Command line tools are already installed. Use "Software Update" in System Settings or the softwareupdate command line interface to install updates
 > ```
 
+> 如果出现 "xcode-select: note: install requested for command line developer tools"
+> 执行的安装请求已经被系统接收, 正准备开始安装. 可以看下底部是否有如下图标.
+
+<img src="image/5.png" alt="Xcode 安装弹窗" width="190" />
+<img src="image/6.png" alt="Xcode 安装弹窗" width="490" />
 ---
 
 ## 五、检查芯片类型
@@ -283,6 +308,8 @@ xcode-select --install
 > 目前这个方式非常容易出现**人机检测**, 如果出现了, 请直接跳到 [七、Intel 芯片 Mac 安装步骤](#七intel-芯片-mac-安装步骤) 进行安装.
 > 
 > 如curl: (22) The requested URL returned error: 403. 
+> 
+> 或curl: (56) Failure writing output to destination, passed 1330 return 0.
 > 
 > 或'bash: line 1: syntax error near unexpected token `<'
 bash: line 1: `<!DOCTYPE html><!-- Last Published: Sat Jun 13 2026 01:37:35 GMT+0000 (Coordinated Universal Time) --><html data-wf-domain="websitemain.claude.com" data-wf'
@@ -345,6 +372,12 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 ```
 
 <img src="image/intel/1.jpg" alt="安装 nvm" width="680" />
+
+如果出现以下提示, 则说明网络问题, 需要打开科学上网工具后重试:
+
+```
+curl: (16) Error in the HTTP2 framing layer
+```
 
 ### 7.2 配置生效
 
@@ -418,7 +451,7 @@ claude
 
 ---
 
-## 附录：科学上网配置
+## 附录:科学上网配置
 
 如果你的网络无法直接访问 Google 等海外服务, 需要先配置科学上网工具.
 
@@ -431,7 +464,7 @@ claude
 
 ### A.2 购买套餐
 
-1. 点击 **商店**, 购买一个月套餐即可（约 12 元）
+1. 点击 **商店**, 购买一个月套餐即可 (约 12 元)
 
 <img src="image/科学上网/0.jpg" alt="商店页面" width="500" />
 
@@ -443,10 +476,12 @@ claude
 
 2. 点击 **下载客户端**
 
+> 目前这里的客户端不再是ClashX Pro, 而是定制版的 ClashX Pro, 可联系公司管理员要安装包.
+
 <img src="image/科学上网/2.jpg" alt="下载客户端" width="680" />
 
-3. 下载完成后, 双击打开安装包, 拖动到 **应用程序** 中即可
-4. 如果出现 "无法打开, 因为不是从 App Store 下载", 则前往 **设置 → 隐私与安全性**, 下拉可以看到:
+1. 下载完成后, 双击打开安装包, 拖动到 **应用程序** 中即可
+2. 如果出现 "无法打开, 因为不是从 App Store 下载", 则前往 **设置 → 隐私与安全性**, 下拉可以看到:
    1. 安全性 → 允许以下来源的应用程序 → 选择 **App Store 与已知开发者**
    2. 安全性 → 点击 **仍要打开**
 
