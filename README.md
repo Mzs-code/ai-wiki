@@ -14,6 +14,7 @@ AI 企业培训白皮书与 Claude Code 实操指南合集. 围绕"为什么用,
 | 💻 [安装指南 - Windows(简版)](./安装指南/ClaudeCode安装指南-Windows-简版.md) | Windows 简版安装流程 |
 | 📝 [AI 岗位 JD](./AI岗位JD与面试题册/AI岗位JD.md) | AI 工程师(技术基座与企业 AI 赋能)对外招聘 JD |
 | 📝 [AI 岗位面试题册](./AI岗位JD与面试题册/AI岗位面试题册.md) | 概念题 + 实证核验两部分,含参考答案/扣分项/硬门槛(另有 [亮色](./AI岗位JD与面试题册/AI岗位面试题册-亮色.html) / [暗色](./AI岗位JD与面试题册/AI岗位面试题册-暗色.html) HTML 版) |
+| 📰 [引导 Claude Code 的七种方法](./Anthropic博客解读/七种方法指导Claude.html) | Anthropic 官方博客解读:CLAUDE.md · skills · hooks · rules · subagents 等七种交付指令方法的对比与选型 |
 
 ## 内容预览
 
